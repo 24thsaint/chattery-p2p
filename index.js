@@ -16,31 +16,29 @@
             this.swarm = Swarm(this.config);
             this.peers = {};
             this.name = faker.name.firstName();
+            this.debug = false;
 
             this.swarm.on('redundant-connection', (connection, peer) => {
-                console.log(peer);
-                console.log(`Redundant connection detected, dropping ${peer.host}:${peer.port}...`);
+                this.log(`Redundant connection detected, dropping ${peer.host}:${peer.port}...`);
             });
 
             this.swarm.on('peer', (peer) => {
-                readline.clearLine(process.stdout);
-                this.rl.close();
-                this.rl = undefined;
-                
-                console.log(`Peer ${peer.id} discovered, connecting...`);
-
-                this.prompt();
+                this.log(`Peer ${peer.id} discovered, connecting...`);
             });
 
             this.swarm.on('peer-rejected', (peerAddress, reason) => {
+                this.log(`Peer ${peerAddress.host}:${peerAddress.port} rejected, reason: ${reason.reason}`);
+            });
+        }
+
+        log(message) {
+            if (this.debug) {
                 readline.clearLine(process.stdout);
                 this.rl.close();
                 this.rl = undefined;
-
-                console.log(`Peer ${peerAddress.host}:${peerAddress.port} rejected, reason: ${reason.reason}`);
-
+                console.log(message);
                 this.prompt();
-            });
+            }
         }
 
         prompt() {
@@ -67,10 +65,17 @@
                             process.exit(0);
                             break;
                         }
-                        case '/info': {
+                    case '/info':
+                        {
                             console.log(`Queued: ${this.swarm.queued}`);
                             console.log(`Connecting: ${this.swarm.connecting}`);
                             console.log(`Connected: ${this.swarm.connected}`);
+                            break;
+                        }
+                    case '/debug':
+                        {
+                            this.debug = !this.debug;
+                            console.log(`Debugging mode set to ${this.debug}`);
                             break;
                         }
                     default:

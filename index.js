@@ -17,6 +17,7 @@
             this.peers = {};
             this.name = faker.name.firstName();
             this.debug = false;
+            this.port = process.env.PORT || 8080;
 
             this.swarm.on('redundant-connection', (connection, peer) => {
                 this.log(`Redundant connection detected, dropping ${peer.host}:${peer.port}...`);
@@ -107,17 +108,17 @@
             })
         }
 
-        async _listen() {
-            const availablePort = await getPort({
-                port: process.env.PORT
-            });
-            console.log(`Listening on ${availablePort}:${this.id}`);
-            this.swarm.listen(availablePort);
+        _listen() {
+            // const availablePort = await getPort({
+            //     port: process.env.PORT
+            // });
+            console.log(`Listening on ${this.port}:${this.id}`);
+            this.swarm.listen(this.port);
         }
 
-        async connect(channel) {
+        connect(channel) {
             this.channel = channel;
-            await this._listen();
+            this._listen();
             this.swarm.join(channel);
             this.swarm.on('connection', (connection, info) => {
                 const peerId = info.id.toString();

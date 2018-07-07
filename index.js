@@ -116,25 +116,31 @@
             this.swarm.listen(this.port);
         }
 
+        addPeer(peerId, connection) {
+            if (!this.peers[peerId]) {
+                this.peers[peerId] = connection;
+
+                console.log(colors.cyan(`[${new Date().toISOString()}] INFO: ${peerId.substring(0, 7)} has joined!`));
+
+                readline.clearLine(process.stdout);
+                this.rl.close();
+                this.rl = undefined;
+
+                this.prompt();
+            }
+        }
+
         connect(channel) {
             this.channel = channel;
             this._listen();
             this.swarm.join(channel);
             this.swarm.on('connection', (connection, info) => {
                 const peerId = info.id.toString();
-                if (!this.peers[peerId]) {
-                    this.peers[peerId] = connection;
-
-                    console.log(colors.cyan(`[${new Date().toISOString()}] INFO: ${peerId.substring(0, 7)} has joined!`));
-
-                    readline.clearLine(process.stdout);
-                    this.rl.close();
-                    this.rl = undefined;
-
-                    this.prompt();
-                }
-
+                this.addPeer(peerId, connection);
+                
                 connection.on('data', (data) => {
+                    this.addPeer(peerId, connection);
+
                     readline.clearLine(process.stdout);
                     this.rl.close();
                     this.rl = undefined;

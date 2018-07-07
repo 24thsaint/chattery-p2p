@@ -9,7 +9,7 @@ var net = require('net');
 const swarm = new Swarm();
 swarm.connect(feedId, (peer) => {
     var socket = net.connect({
-        port: 7777,
+        port: 8080,
         host: peer.address
     });
 

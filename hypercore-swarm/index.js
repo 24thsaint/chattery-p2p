@@ -16,8 +16,8 @@ class Swarmer {
             console.log(peer.remoteAddress);
             callback({
                 address: peer.remoteAddress,
-                port: 7777
-            });
+                port: 8080
+            }); 
         })
     }
 

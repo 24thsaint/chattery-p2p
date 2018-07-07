@@ -22,7 +22,13 @@ remoteFeed.on('upload', (index, data) => {
   console.log(index, data.toString());
 })
 
-server.listen(process.env.PORT || 7777);
+setInterval(() => {
+  const words = faker.random.words(5);
+  console.log('Appended: ' + words);
+  remoteFeed.append(words);
+}, 1000);
+
+server.listen(process.env.PORT || 8080);
 
 remoteFeed.on('ready', () => {
   const key = Buffer.from(remoteFeed.key).toString('hex');
@@ -30,12 +36,12 @@ remoteFeed.on('ready', () => {
   swarmer.connect(key, (peer) => {
     console.log(`Connected to ${peer.address}:${peer.port}`)
   });
-
-  setInterval(() => {
-    remoteFeed.append(faker.random.words(5));
-  }, 1000);
 })
 
 remoteFeed.on('error', (err) => {
   console.log('something went wrong', err)
 });
+
+remoteFeed.on('append', () => {
+  console.log('Feed appended!');
+})

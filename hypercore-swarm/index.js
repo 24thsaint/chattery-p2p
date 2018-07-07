@@ -13,7 +13,11 @@ class Swarmer {
         this.swarm.listen(7000);
         this.swarm.join(channel);
         this.swarm.on('connection', (peer, connection) => {
-            callback(peer.address());
+            console.log(peer.remoteAddress);
+            callback({
+                address: peer.remoteAddress,
+                port: 7777
+            });
         })
     }
 

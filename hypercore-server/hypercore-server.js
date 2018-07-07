@@ -1,7 +1,7 @@
 const hypercore = require('hypercore');
 const faker = require('faker');
 const Swarmer = require('../hypercore-swarm/index');
-const remoteFeed = hypercore('./messages', {
+const remoteFeed = hypercore('./messages', '2621de13c958d61c7d7f652631e08b77de204082444534cc9fa94184fedb21c2', {
   valueEncoding: 'utf-8'
 });
 
@@ -22,7 +22,7 @@ remoteFeed.on('upload', (index, data) => {
   console.log(index, data.toString());
 })
 
-server.listen(7777);
+server.listen(process.env.PORT || 7777);
 
 remoteFeed.on('ready', () => {
   const key = Buffer.from(remoteFeed.key).toString('hex');

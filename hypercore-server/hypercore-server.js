@@ -28,11 +28,10 @@ setInterval(() => {
   remoteFeed.append(words);
 }, 1000);
 
-server.listen(process.env.PORT || 8080);
+server.listen(6000);
 
 remoteFeed.on('ready', () => {
-  const key = Buffer.from(remoteFeed.key).toString('hex');
-  console.log(key);
+  const key = remoteFeed.discoveryKey.toString('hex');
   swarmer.connect(key, (peer) => {
     console.log(`Connected to ${peer.address}:${peer.port}`)
   });

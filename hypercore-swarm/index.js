@@ -18,6 +18,12 @@ class Swarmer {
                 address: peer.remoteAddress,
                 port: 6000
             }); 
+
+            peer.on('data', (data) => {
+                console.log(data.toString());
+            })
+
+            peer.write('HELLO!'); 
         })
     }
 

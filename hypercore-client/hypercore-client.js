@@ -16,7 +16,11 @@ swarm.connect(feedDiscoveryKey, (peer) => {
         host: peer.address
     });
 
-    socket.pipe(localFeed.replicate()).pipe(socket)
+    socket.pipe(localFeed.replicate({
+        live: true,
+        download: true,
+        encrypt: true
+    })).pipe(socket)
 
     localFeed.on('sync', () => {
         console.log('feed synced!')
@@ -25,4 +29,12 @@ swarm.connect(feedDiscoveryKey, (peer) => {
     localFeed.on('download', (index, data) => {
         console.log(index, data.toString());
     });
+    
+    socket.on('error', () => {
+        console.log(`Failed to connect to ${peer.address}:${peer.port}`);
+    })
+    
+    localFeed.on('error', () => {
+        console.log(`Failed to connect to ${peer.address}:${peer.port}`);
+    })
 });

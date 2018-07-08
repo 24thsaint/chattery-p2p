@@ -12,7 +12,11 @@ remoteFeed.append('test');
 var net = require('net')
 
 var server = net.createServer(function (socket) {
-  socket.pipe(remoteFeed.replicate()).pipe(socket)
+  socket.pipe(remoteFeed.replicate({
+        live: true,
+        download: true,
+        encrypt: true
+    })).pipe(socket)
   socket.on('error', (err) => {
     console.log('server error', err)
   })

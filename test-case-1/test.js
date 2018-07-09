@@ -13,19 +13,19 @@ const config = defaults({
 
 const swarm = Swarm(config);
 
-this.swarm.on('redundant-connection', (connection, peer) => {
-    this.log(`Redundant connection detected, dropping ${peer.host}:${peer.port}...`);
+swarm.on('redundant-connection', (connection, peer) => {
+    console.log(`Redundant connection detected, dropping ${peer.host}:${peer.port}...`);
 });
 
-this.swarm.on('peer', (peer) => {
-    this.log(`Peer ${peer.id} discovered, connecting...`);
+swarm.on('peer', (peer) => {
+    console.log(`Peer ${peer.id} discovered, connecting...`);
 });
 
-this.swarm.on('peer-rejected', (peerAddress, reason) => {
-    this.log(`Peer ${peerAddress.host}:${peerAddress.port} rejected, reason: ${reason.reason}`);
+swarm.on('peer-rejected', (peerAddress, reason) => {
+    console.log(`Peer ${peerAddress.host}:${peerAddress.port} rejected, reason: ${reason.reason}`);
 });
 
-this.swarm.on('connection', (connection, info) => {   
+swarm.on('connection', (connection, info) => {   
     connection.on('data', (data) => {
         console.log('Remote data: ' + data.toString());
     });

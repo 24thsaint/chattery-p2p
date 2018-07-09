@@ -26,8 +26,12 @@ swarm.on('peer-rejected', (peerAddress, reason) => {
 });
 
 swarm.on('connection', (connection, info) => {   
+    connection.write('test!');
+
     connection.on('data', (data) => {
         console.log('Remote data: ' + data.toString());
+        const message = faker.random.words(4);
+        connection.write(message);
     });
 
     setInterval(() => {
@@ -37,5 +41,5 @@ swarm.on('connection', (connection, info) => {
     }, 1000);
 });
 
-swarm.listen(8088);
+swarm.listen(process.env.PORT || 8088);
 swarm.join('rave-8088-test-case-1');

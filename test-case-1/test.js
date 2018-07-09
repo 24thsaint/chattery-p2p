@@ -31,8 +31,11 @@ swarm.on('connection', (connection, info) => {
     });
 
     setInterval(() => {
-        connection.write(faker.random.words(4));
+        const message = faker.random.words(4);
+        connection.write(message);
+        console.log('Written: ' + message);
     }, 1000);
 });
 
 swarm.listen(8088);
+swarm.join('kingsland-8088');

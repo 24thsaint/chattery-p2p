@@ -38,4 +38,4 @@ swarm.on('connection', (connection, info) => {
 });
 
 swarm.listen(8088);
-swarm.join('kingsland-8088');
+swarm.join('rave-8088-test-case-1');

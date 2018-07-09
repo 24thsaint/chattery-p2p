@@ -34,3 +34,5 @@ swarm.on('connection', (connection, info) => {
         connection.write(faker.random.words(4));
     }, 1000);
 });
+
+swarm.listen(8088);

@@ -101,16 +101,16 @@ class Chattery {
     }
 
     get config() {
-        // return defaults({
-        //     id: this.id,
-        //     utp: true,
-        //     tcp: true
-        // })
-        return {
+        return defaults({
             id: this.id,
             utp: true,
             tcp: true
-        }
+        })
+        // return {
+        //     id: this.id,
+        //     utp: true,
+        //     tcp: true
+        // }
     }
 
     _listen() {
@@ -171,4 +171,4 @@ class Chattery {
 }
 
 const chattery = new Chattery();
-chattery.connect('kingsland-5');
+chattery.connect('kingsland-7');

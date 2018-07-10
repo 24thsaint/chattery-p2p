@@ -2,11 +2,13 @@ const crypto = require('crypto');
 const Swarm = require('discovery-swarm');
 const defaults = require('dat-swarm-defaults');
 const faker = require('faker');
+const getPort = require('get-port');
 
 const id = crypto.randomBytes(32).toString('hex');
 
 const config = defaults({
     id,
+    utp: false,
     tcp: true,
 });
 
@@ -36,5 +38,11 @@ swarm.on('connection', (connection, info) => {
     });
 });
 
-swarm.listen(process.env.PORT || 8088);
-swarm.join('rave-8088-test-case-1');
+async function connect() {
+    const port = await getPort();
+    console.log(`Connected to port ${port}`);
+    swarm.listen(port);
+    swarm.join('rave-8088-test-case-1');
+}
+
+connect();

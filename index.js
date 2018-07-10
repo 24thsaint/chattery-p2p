@@ -30,6 +30,11 @@ class Chattery {
         this.swarm.on('peer-rejected', (peerAddress, reason) => {
             this.log(`Peer ${peerAddress.host}:${peerAddress.port} rejected, reason: ${reason.reason}`);
         });
+
+        this.swarm.on('connect-failed', (peer, details) => {
+            this.log(`Failed to connect to ${peer.id} with reason: `);
+            this.log(details);
+        })
     }
 
     log(message) {
@@ -104,7 +109,7 @@ class Chattery {
         return defaults({
             id: this.id,
             utp: true,
-            tcp: true
+            tcp: false
         })
         // return {
         //     id: this.id,
@@ -171,4 +176,4 @@ class Chattery {
 }
 
 const chattery = new Chattery();
-chattery.connect('kingsland-7');
+chattery.connect('kingsland-8');

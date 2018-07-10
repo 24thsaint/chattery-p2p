@@ -60,4 +60,10 @@ typings/
 # next.js build output
 .next
 
-messages/
+hypercore-server/messages/*
+!hypercore-server/messages/key
+!hypercore-server/messages/secret_key
+
+hypercore-client/messages/*
+!hypercore-client/messages/key
+!hypercore-client/messages/secret_key

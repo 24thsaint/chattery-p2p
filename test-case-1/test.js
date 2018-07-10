@@ -30,17 +30,12 @@ const sender = faker.name.firstName();
 
 swarm.on('connection', (connection, info) => {   
     connection.on('data', (data) => {
-        const message = JSON.parse(data);
-        console.log(`[${message.sender}]: ${message.content}`);
+        console.log(data.toString());
     });
     
     setInterval(() => {
         const content = faker.random.words(4);
-        const message = {
-            sender,
-            content
-        }
-        connection.write(JSON.stringify(message));
+        connection.write(`[${sender}]: ${content}`);
     }, faker.random.number({min: 1000, max: 5000}));
 });
 

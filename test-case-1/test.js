@@ -29,7 +29,7 @@ swarm.on('peer-rejected', (peerAddress, reason) => {
 const sender = faker.name.firstName();
 const peers = [];
 
-swarm.on('connection', (connection, info) => {   
+swarm.on('connection', (connection, info) => {
     peers.push(connection);
 
     connection.on('data', (data) => {
@@ -43,12 +43,13 @@ async function connect() {
     swarm.listen(port);
     swarm.join('rave-8088-test-case-1');
 
-    peers.forEach((connection) => {
-        setInterval(() => {
+    let timeout = 1000;
+    setInterval(() => {
+        peers.forEach((connection) => {
             const content = faker.random.words(4);
             connection.write(`[${sender}]: ${content}`);
-        }, faker.random.number({min: 1000, max: 5000}));
-    })
+        });
+    }, timeout);
 }
 
 connect();

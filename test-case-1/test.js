@@ -27,16 +27,14 @@ swarm.on('peer-rejected', (peerAddress, reason) => {
 });
 
 const sender = faker.name.firstName();
+const peers = [];
 
 swarm.on('connection', (connection, info) => {   
+    peers.push(connection);
+
     connection.on('data', (data) => {
         console.log(data.toString());
     });
-    
-    setInterval(() => {
-        const content = faker.random.words(4);
-        connection.write(`[${sender}]: ${content}`);
-    }, faker.random.number({min: 1000, max: 5000}));
 });
 
 async function connect() {
@@ -44,6 +42,13 @@ async function connect() {
     console.log(`Connected to port ${port}`);
     swarm.listen(port);
     swarm.join('rave-8088-test-case-1');
+
+    peers.forEach((connection) => {
+        setInterval(() => {
+            const content = faker.random.words(4);
+            connection.write(`[${sender}]: ${content}`);
+        }, faker.random.number({min: 1000, max: 5000}));
+    })
 }
 
 connect();

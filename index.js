@@ -143,7 +143,7 @@ class Chattery {
     connect(channel) {
         this.channel = channel;
         this._listen();
-        this.swarm.join(channel);
+        this.swarm.join(channel, {announce: true});
         this.swarm.on('connection', (connection, info) => {
             const peerId = info.id.toString();
             this.addPeer(peerId, connection);

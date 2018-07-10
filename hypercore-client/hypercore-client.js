@@ -12,7 +12,7 @@ const localFeed = hypercore('./messages', feedId, {
 const swarm = new Swarm();
 swarm.connect(feedDiscoveryKey, (peer) => {
     var socket = net.connect({
-        port: peer.port,
+        port: 6000,
         host: peer.address
     });
 

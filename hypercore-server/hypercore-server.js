@@ -22,16 +22,6 @@ var server = net.createServer(function (socket) {
   })
 })
 
-remoteFeed.on('upload', (index, data) => {
-  console.log(index, data.toString());
-})
-
-setInterval(() => {
-  const words = faker.random.words(5);
-  console.log('Appended: ' + words);
-  remoteFeed.append(words);
-}, 1000);
-
 server.listen(6000);
 
 remoteFeed.on('ready', () => {
@@ -39,12 +29,22 @@ remoteFeed.on('ready', () => {
   swarmer.connect(key, (peer) => {
     console.log(`Connected to ${peer.address}:${peer.port}`)
   });
-})
 
-remoteFeed.on('error', (err) => {
-  console.log('something went wrong', err)
+  remoteFeed.on('upload', (index, data) => {
+    console.log(index, data.toString());
+  });
+
+  remoteFeed.on('error', (err) => {
+    console.log('something went wrong', err)
+  });
+  
+  remoteFeed.on('append', () => {
+    console.log('Feed appended!');
+  });
+  
+  setInterval(() => {
+    const words = faker.random.words(5);
+    console.log('Appended: ' + words);
+    remoteFeed.append(words);
+  }, 1000);
 });
-
-remoteFeed.on('append', () => {
-  console.log('Feed appended!');
-})

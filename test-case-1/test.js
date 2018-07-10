@@ -8,7 +8,10 @@ const id = crypto.randomBytes(32).toString('hex');
 const config = defaults({
     id,
     utp: true,
-    tcp: true
+    tcp: true,
+    connect: function(st) {
+        console.log(st)
+    }
 });
 
 const swarm = Swarm(config);
@@ -25,6 +28,8 @@ swarm.on('peer-rejected', (peerAddress, reason) => {
     console.log(`Peer ${peerAddress.host}:${peerAddress.port} rejected, reason: ${reason.reason}`);
 });
 
+
+
 swarm.on('connection', (connection, info) => {   
     connection.write('test!');
 
@@ -34,11 +39,11 @@ swarm.on('connection', (connection, info) => {
         connection.write(message);
     });
 
-    setInterval(() => {
-        const message = faker.random.words(4);
-        connection.write(message);
-        console.log('Written: ' + message);
-    }, 1000);
+    // setInterval(() => {
+    //     const message = faker.random.words(4);
+    //     connection.write(message);
+    //     console.log('Written: ' + message);
+    // }, 1000);
 });
 
 swarm.listen(process.env.PORT || 8088);

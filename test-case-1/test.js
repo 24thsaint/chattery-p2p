@@ -26,16 +26,22 @@ swarm.on('peer-rejected', (peerAddress, reason) => {
     console.log(`Peer ${peerAddress.host}:${peerAddress.port} rejected, reason: ${reason.reason}`);
 });
 
-
+const sender = faker.name.firstName();
 
 swarm.on('connection', (connection, info) => {   
-    connection.write('test!');
-
     connection.on('data', (data) => {
-        console.log('Remote data: ' + data.toString());
-        const message = faker.random.words(4);
-        connection.write(message);
+        const message = JSON.parse(data);
+        console.log(`[${message.sender}]: ${message.content}`);
     });
+    
+    setInterval(() => {
+        const content = faker.random.words(4);
+        const message = {
+            sender,
+            content
+        }
+        connection.write(JSON.stringify(message));
+    }, faker.random.number({min: 1000, max: 5000}));
 });
 
 async function connect() {

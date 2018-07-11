@@ -1,13 +1,12 @@
 const hypercore = require("hypercore");
 const hyperdiscovery = require("hyperdiscovery");
-const ram = require("random-access-memory");
 
 const remote = process.argv[2] || '6644879327d3aea348b24086e392e157105035a296640f1bd7ff05d70d275064';
 
 console.log(`Currently connecting to ${remote} hypercore`);
 console.log("Alternative usage: node hyperRead.js <key from writer.js|other hypercore key>");
 
-const feed = hypercore(ram, remote, {
+const feed = hypercore('./data', remote, {
     valueEncoding: "json"
 });
 

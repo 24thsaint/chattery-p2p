@@ -67,3 +67,5 @@ hypercore-server/messages/*
 hypercore-client/messages/*
 !hypercore-client/messages/key
 !hypercore-client/messages/secret_key
+
+hyper-discovery/data/*

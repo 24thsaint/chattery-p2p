@@ -30,17 +30,19 @@ feed.on("ready", function () {
     swarm.on('data', (data) => {
         console.log('SWARM', data.toString());
     });
-});
 
-const stream = feed.createReadStream({
-    start: 0,
-    live: true
-});
-
-stream.on("data", function (data) {
-    console.log("data", data);
-})
-
-feed.on('sync', () => {
-    console.log('feed synced');
+    const start = feed.length;
+    
+    const stream = feed.createReadStream({
+        start,
+        live: true
+    });
+    
+    stream.on("data", function (data) {
+        console.log("data", data);
+    })
+    
+    feed.on('sync', () => {
+        console.log('feed synced');
+    });
 });

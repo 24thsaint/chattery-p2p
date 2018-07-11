@@ -12,7 +12,7 @@ var feed = hypercore(ram, remote, {valueEncoding: "json"})
 var swarm
 feed.on("ready", function() {
     console.log(feed.key.toString("hex"))
-    swarm = hyperdiscovery(feed, {live: true, download: true})
+    swarm = hyperdiscovery(feed, {live: true, port: 1001, tcp: true, utp: true})
 
     swarm.on("connection", function(peer, type) {
         console.log("i had a connection")

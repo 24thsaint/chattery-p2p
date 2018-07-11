@@ -20,7 +20,8 @@ feed.on("ready", function () {
         port: 6000,
         tcp: true,
         utp: true,
-        download: true
+        download: true,
+        upload: true
     });
 
     swarm.on("connection", function (peer, type) {

@@ -15,6 +15,7 @@
     "faker": "^4.1.0",
     "get-port": "^3.2.0",
     "hypercore": "^6.17.2",
+    "hyperdiscovery": "^8.0.0",
     "portfinder": "^1.0.13"
   }
 }

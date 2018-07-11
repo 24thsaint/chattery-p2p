@@ -2,7 +2,7 @@ var hypercore = require("hypercore")
 var hyperdiscovery = require("hyperdiscovery")
 var ram = require("random-access-memory")
 
-var remote = 'a647b0c432f3bf941862b53da899f135b17953f51f868672e8d3cc39c81731a3'
+var remote = '6644879327d3aea348b24086e392e157105035a296640f1bd7ff05d70d275064'
 if (!remote) {
     console.log("usage: node hyperRead.js <key from swarm-write.js|other hypercore key>")
     process.exit()

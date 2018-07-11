@@ -2,23 +2,29 @@ const hypercore = require("hypercore");
 const hyperdiscovery = require("hyperdiscovery");
 const ram = require("random-access-memory");
 
-const remote = '6644879327d3aea348b24086e392e157105035a296640f1bd7ff05d70d275064';
+const remote = process.argv[2] || '6644879327d3aea348b24086e392e157105035a296640f1bd7ff05d70d275064';
 
-if (!remote) {
-    console.log("usage: node hyperRead.js <key from swarm-write.js|other hypercore key>");
-    process.exit(0);
-}
+console.log(`Currently connecting to ${remote} hypercore`);
+console.log("Alternative usage: node hyperRead.js <key from writer.js|other hypercore key>");
 
-const feed = hypercore(ram, remote, {valueEncoding: "json"});
+const feed = hypercore(ram, remote, {
+    valueEncoding: "json"
+});
 
 let swarm;
 
-feed.on("ready", function() {
+feed.on("ready", function () {
     console.log(feed.key.toString("hex"));
-    swarm = hyperdiscovery(feed, {live: true, port: 6000, tcp: true, utp: true});
+    swarm = hyperdiscovery(feed, {
+        live: true,
+        port: 6000,
+        tcp: true,
+        utp: true,
+        download: true
+    });
 
-    swarm.on("connection", function(peer, type) {
-        console.log("i had a connection");
+    swarm.on("connection", function (peer, type) {
+        console.log("I have a connection");
     });
 
     swarm.on('data', (data) => {
@@ -26,9 +32,12 @@ feed.on("ready", function() {
     });
 });
 
-const stream = feed.createReadStream({start: 0, live: true});
+const stream = feed.createReadStream({
+    start: 0,
+    live: true
+});
 
-stream.on("data", function(data) {
+stream.on("data", function (data) {
     console.log("data", data);
 })
 

@@ -17,6 +17,9 @@
     "hypercore": "^6.17.2",
     "hyperdiscovery": "^8.0.0",
     "portfinder": "^1.0.13",
-    "random-access-memory": "^3.0.0"
+    "random-access-memory": "^3.0.0",
+    "signalhub": "^4.9.0",
+    "webrtc-swarm": "^2.9.0",
+    "wrtc": "^0.1.6"
   }
 }

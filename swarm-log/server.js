@@ -1,6 +1,6 @@
 const swarmlog = require('swarmlog');
 const keys = require('./keys.json');
-const sodium = require('sodium');
+const sodium = require('chloride/browser');
 const wrtc = require('wrtc');
 const level = require('level');
 const faker = require('faker');
@@ -40,6 +40,6 @@ setInterval(() => {
 			max: 5000
 		})
 	});
-}, 1000);
+}, 7000);
 
 module.exports = server;

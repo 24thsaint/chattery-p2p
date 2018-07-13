@@ -1,5 +1,5 @@
 const swarmlog = require('swarmlog');
-const sodium = require('sodium');
+const sodium = require('chloride/browser');
 const level = require('level');
 const wrtc = require('wrtc');
 const publicKey = require('./keys.json').public;

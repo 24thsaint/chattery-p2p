@@ -21,7 +21,6 @@
     "portfinder": "^1.0.13",
     "random-access-memory": "^3.0.0",
     "signalhub": "^4.9.0",
-    "sodium": "^2.0.3",
     "ssb-keys": "^7.0.16",
     "swarmlog": "^1.4.0",
     "webrtc-swarm": "^2.9.0",

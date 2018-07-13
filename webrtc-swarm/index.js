@@ -7,7 +7,7 @@ const colors = require('colors');
 
 class Chatter {
   constructor() {
-    this.hub = signalhub('swarm-example', ['http://signalhub-router.herokuapp.com/']);
+    this.hub = signalhub('kingsland', ['http://signalhub-router.herokuapp.com/']);
     this.peers = {};
     this.sw = swarm(this.hub, {
       wrtc: wrtc

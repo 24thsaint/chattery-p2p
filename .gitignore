@@ -69,3 +69,6 @@ hypercore-client/messages/*
 !hypercore-client/messages/secret_key
 
 hyper-discovery/data/*
+
+swarm-log/client-database
+swarm-log/server-database

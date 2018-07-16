@@ -63,7 +63,7 @@ class Server {
         this.rl.prompt();
 
         this.rl.on('line', (line) => {
-            
+
             if (line.startsWith('/name')) {
                 const parsedInput = line.split(' ');
                 this.user = parsedInput[1];
@@ -82,7 +82,7 @@ class Server {
                     }
                 case '/leave':
                     {
-                        this.sw.close(() => {
+                        this.log.sw.close(() => {
                             console.log(colors.bgGreen('Exit success'));
                             process.exit(0);
                         });

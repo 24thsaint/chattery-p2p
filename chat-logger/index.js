@@ -22,18 +22,18 @@ class Server {
         this.stream = this.log.createReadStream({
             live: true
         });
-        
+
         this.stream.on('data', (data) => {
             const message = JSON.parse(data.value);
             this.printer(`[${colors.gray(message.timestamp)}] ${colors.cyan(message.sender)}: ${message.content}`);
         });
 
         this.log.swarm.on('peer', (peer, id) => {
-            this.printer(`[${new Date().toISOString()}] ${id} has joined!`);
+            this.printer(colors.bgCyan(`[${new Date().toISOString()}] ${id} has joined!`), 7);
         })
 
         this.log.swarm.on('disconnect', (peer, id) => {
-            this.printer(`[${new Date().toISOString()}] ${id} has disconnected!`);
+            this.printer(colors.bgCyan(`[${new Date().toISOString()}] ${id} has disconnected!`), 7);
         })
 
         this.user = faker.name.firstName();
@@ -63,6 +63,7 @@ class Server {
         this.rl.prompt();
 
         this.rl.on('line', (line) => {
+            
             if (line.startsWith('/name')) {
                 const parsedInput = line.split(' ');
                 this.user = parsedInput[1];

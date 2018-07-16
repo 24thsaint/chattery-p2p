@@ -62,12 +62,28 @@ class Client {
 				callback(response);
 			});
 	}
+
+	findOne(query, callback) {
+		this.find(query, (data) => {
+			const sortedData = data.sort((a, b) => {
+				const dateA = new Date(a.appendedOn);
+				const dateB = new Date(b.appendedOn);
+
+				if (dateA === dateB) {
+					return 0;
+				}
+
+				return dateA < dateB ? 1 : -1;
+			});
+
+			callback(sortedData[0]);
+		});
+	}
 }
 
 const client = new Client();
-client.find({
-	hotel: 'RICHMONDE HOTEL',
-	roomType: 'Small'
+client.findOne({
+	date: 'Wed Aug 29 2018'
 }, (data) => {
 	console.log(data);
 });

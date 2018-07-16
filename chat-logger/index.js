@@ -82,7 +82,7 @@ class Server {
                     }
                 case '/leave':
                     {
-                        this.log.sw.close(() => {
+                        this.log.swarm.close(() => {
                             console.log(colors.bgGreen('Exit success'));
                             process.exit(0);
                         });

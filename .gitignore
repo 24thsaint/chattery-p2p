@@ -72,3 +72,5 @@ hyper-discovery/data/*
 
 swarm-log/client-database
 swarm-log/server-database
+
+chat-logger/chat-database

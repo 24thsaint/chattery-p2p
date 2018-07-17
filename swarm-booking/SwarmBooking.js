@@ -1,15 +1,16 @@
 const swarmlog = require('swarmlog')
 const wrtc = require('wrtc')
-const readline = require('readline');
+const readline = require('readline')
 const level = require('level')
 const colors = require('colors')
+const crypto = require('crypto')
 
-const verbose = process.env.VERBOSE || false;
+const verbose = process.env.VERBOSE || false
 
 class SwarmBooking {
     constructor() {
         this.booking = {}
-        this.rl = undefined;
+        this.rl = undefined
 
         /**
          * This is a local level instance so that we can manually set
@@ -93,18 +94,25 @@ class SwarmBooking {
      * @param {string} key
      */
     index(json, key) {
-        this.database.put(JSON.stringify(json), key, (err) => {
+        const data = this._hash(JSON.stringify(json));
+        this.database.put(data, key, (err) => {
             if (err) return this._logger(err)
         })
-        this.database.get(JSON.stringify(json), (err, val) => {
+        this.database.get(data, (err, val) => {
             if (err) return this._logger(err)
             this._logger('index', val)
         })
     }
 
+    _hash(text) {
+        const hash = crypto.createHash('sha256')
+        hash.update(text)
+        return hash.digest('hex').toString()
+    }
+
     _logger(message) {
         if (verbose) {
-            console.log(message);
+            console.log(message)
         }
     }
 
@@ -112,7 +120,7 @@ class SwarmBooking {
      * Prompts the user for inputs.
      */
     prompter() {
-        const booking = {};
+        const booking = {}
 
         this.rl = readline.createInterface({
             input: process.stdin,
@@ -138,13 +146,13 @@ class SwarmBooking {
             if (inc == 2) {
                 booking.date = input
                 await this.book(booking)
-                this.rl.close();
-                this.rl = undefined;
-                this.prompter();
+                this.rl.close()
+                this.rl = undefined
+                this.prompter()
             }
             inc++
-        });
+        })
     }
 }
 
-module.exports = SwarmBooking;
+module.exports = SwarmBooking

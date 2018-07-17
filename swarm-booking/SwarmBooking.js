@@ -53,16 +53,17 @@ class SwarmBooking {
     /**
      * Appends a booking to the log if it does not exist.
      * 
-     * @param {Object} booking - The booking object
+     * @param {Object} hash - The booking object
      */
     async book(booking) {
-        let f = await this.find(booking)
+        const hash = this._hash(booking)
+        let f = await this.find(hash)
         
         if (!f) {
-            await this.log.append(booking)
+            await this.log.append(hash)
             console.log(colors.green('***************************'))
             console.log(colors.green('Room Booked!'))
-            console.log(booking)
+            console.log(hash)
             console.log(colors.green('***************************'))
         } else {
             console.log(colors.red('***************************'))

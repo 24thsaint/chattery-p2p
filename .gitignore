@@ -74,3 +74,6 @@ swarm-log/client-database
 swarm-log/server-database
 
 chat-logger/chat-database
+
+swarm-booking/local
+swarm-booking/swarm

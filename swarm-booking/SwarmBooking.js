@@ -56,14 +56,15 @@ class SwarmBooking {
      * @param {Object} hash - The booking object
      */
     async book(booking) {
-        const hash = this._hash(booking)
+        const hash = this._hash(JSON.stringify(booking))
         let f = await this.find(hash)
         
         if (!f) {
             await this.log.append(hash)
             console.log(colors.green('***************************'))
             console.log(colors.green('Room Booked!'))
-            console.log(hash)
+            console.log(booking)
+            console.log('Hash: ' + hash)
             console.log(colors.green('***************************'))
         } else {
             console.log(colors.red('***************************'))
@@ -77,9 +78,9 @@ class SwarmBooking {
      * 
      * @param {object} query - The object to search
      */
-    async find(query) {
+    async find(key) {
         try {
-            const res = await this.database.get(JSON.stringify(query))
+            const res = await this.database.get(key)
             return res
         } catch (err) {
             this._logger(err)
@@ -91,15 +92,14 @@ class SwarmBooking {
      * Indexes the booking query to a key
      * so that searching will be faster.
      * 
-     * @param {object} json 
+     * @param {object} hashedData 
      * @param {string} key
      */
-    index(json, key) {
-        const data = this._hash(JSON.stringify(json));
-        this.database.put(data, key, (err) => {
+    index(hashedData, key) {
+        this.database.put(hashedData, key, (err) => {
             if (err) return this._logger(err)
         })
-        this.database.get(data, (err, val) => {
+        this.database.get(hashedData, (err, val) => {
             if (err) return this._logger(err)
             this._logger('index', val)
         })

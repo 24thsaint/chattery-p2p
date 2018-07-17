@@ -2,6 +2,7 @@ const swarmlog = require('swarmlog')
 const wrtc = require('wrtc')
 const readline = require('readline');
 const level = require('level')
+const colors = require('colors')
 
 const verbose = process.env.VERBOSE || false;
 
@@ -58,14 +59,14 @@ class SwarmBooking {
         
         if (!f) {
             await this.log.append(booking)
-            console.log('***************************')
-            console.log('Room Booked!')
+            console.log(colors.green('***************************'))
+            console.log(colors.green('Room Booked!'))
             console.log(booking)
-            console.log('***************************')
+            console.log(colors.green('***************************'))
         } else {
-            console.log('***************************')
-            console.log('Room not available')
-            console.log('***************************')
+            console.log(colors.red('***************************'))
+            console.log(colors.red('Room not available'))
+            console.log(colors.red('***************************'))
         }
     }
 

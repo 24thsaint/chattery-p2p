@@ -38,25 +38,42 @@ class Server {
 		this.log.append(data);
 	}
 
-	book(query, room, callback) {
-		this.findOne(query, (data) => {
-			if (!data) {
-				callback(data, {error: 'No Matching Entries'});
-				return;
+	async book(query, room) {
+		const data = await this.findOne(query);
+
+		if (!data) {
+			callback(data, {error: 'No Matching Entries'});
+			return;
+		}
+
+		const roomIndex = data.availableRooms.indexOf(room);
+
+		if (roomIndex < 0) {
+			callback(data, {error: 'Room Not Found'});
+			return;
+		}
+
+		data.availableRooms.splice(roomIndex, 1);
+		data.availableRooms = data.availableRooms;
+		data.appendedOn = new Date();
+		this.append(data);
+
+		return data;
+	}
+
+	createHotel(hotel, date, rooms) {
+		return new Promise((resolve, reject) => {
+			const data = {
+				hotel,
+				date,
+				rooms
 			}
-
-			const roomIndex = data.availableRooms.indexOf(room);
-
-			if (roomIndex < 0) {
-				callback(data, {error: 'Room Not Found'});
-				return;
+			if (typeof rooms === 'string') {
+				const parsedRooms = rooms.split(',').map(room => room.trim());
+				data.rooms = parsedRooms;
 			}
-
-			data.availableRooms.splice(roomIndex, 1);
-			data.availableRooms = data.availableRooms;
-			data.appendedOn = new Date();
 			this.append(data);
-			callback(data);
+			resolve(data);
 		});
 	}
 }

@@ -59,45 +59,54 @@ async function prompt() {
 		case '/showAvailable':
 		{
 			const hotel = await openPrompter('Hotel');
-			let date = await openPrompter('Date');
+			let date = await openPrompter('Date (Month/Day/Year)');
 			date = new Date(date).toDateString();
 
-			server.findOne({
+			const data = await server.findOne({
 				hotel,
 				date
-			}, (err, data) => {
-				if (err) console.log(err);
-				console.log(data);
 			});
+			console.log(data);
 			break;
 		}
 		case '/book':
 		{
 			const hotel = await openPrompter('Hotel');
-			let date = await openPrompter('Date');
+			let date = await openPrompter('Date (Month/Day/Year)');
 			date = new Date(date).toDateString();
 			const room = await openPrompter('Room');
 
-			server.book({
+			const data = await server.book({
 				hotel,
 				date,
-			}, room, (dt, err) => {
-				if (err) {
-					console.log(err);
-				} else {
-					console.log(dt);
-					console.log('*************************');
-					console.log('Room successfully booked!');
-					console.log('*************************');
-				}
-			});
+			}, room);
 
+			console.log(data);
+			console.log('*************************');
+			console.log('Room successfully booked!');
+			console.log('*************************');
+
+			break;
+		}
+		case '/seed':
+		{
+			const response = await create();
+			console.log(response);
 			break;
 		}
 		case '/create':
 		{
-			const response = await create();
-			console.log(response);
+			const hotel = await openPrompter('Hotel');
+			let date = await openPrompter('Date (Month/Day/Year)');
+			date = new Date(date).toDateString();
+			const rooms = await openPrompter('Rooms (comma-separated)');
+
+			const data = await server.createHotel(hotel, date, rooms);
+			console.log(data);
+			console.log('*************************');
+			console.log('Hotel Created!');
+			console.log('*************************');
+
 			break;
 		}
 		default:
@@ -109,4 +118,6 @@ async function prompt() {
 	prompt();
 }
 
-prompt();
+server.database.on('ready', () => {
+	prompt();
+})

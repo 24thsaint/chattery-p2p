@@ -56,54 +56,54 @@ async function prompt() {
 	const command = await openPrompter('Command');
 
 	switch (command) {
-	case '/showAvailable':
-	{
-		const hotel = await openPrompter('Hotel');
-		let date = await openPrompter('Date');
-		date = new Date(date).toDateString();
+		case '/showAvailable':
+		{
+			const hotel = await openPrompter('Hotel');
+			let date = await openPrompter('Date');
+			date = new Date(date).toDateString();
 
-		server.find({
-			hotel,
-			date
-		}, (err, data) => {
-			if (err) console.log(err);
-			console.log(data);
-		});
-		break;
-	}
-	case '/book':
-	{
-		const hotel = await openPrompter('Hotel');
-		let date = await openPrompter('Date');
-		date = new Date(date).toDateString();
-		const room = await openPrompter('Room');
+			server.findOne({
+				hotel,
+				date
+			}, (err, data) => {
+				if (err) console.log(err);
+				console.log(data);
+			});
+			break;
+		}
+		case '/book':
+		{
+			const hotel = await openPrompter('Hotel');
+			let date = await openPrompter('Date');
+			date = new Date(date).toDateString();
+			const room = await openPrompter('Room');
 
-		server.book({
-			hotel,
-			date,
-		}, room, (dt, err) => {
-			if (err) {
-				console.log(err);
-			} else {
-				console.log(dt);
-				console.log('*************************');
-				console.log('Room successfully booked!');
-				console.log('*************************');
-			}
-		});
+			server.book({
+				hotel,
+				date,
+			}, room, (dt, err) => {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log(dt);
+					console.log('*************************');
+					console.log('Room successfully booked!');
+					console.log('*************************');
+				}
+			});
 
-		break;
-	}
-	case '/create':
-	{
-		const response = await create();
-		console.log(response);
-		break;
-	}
-	default:
-	{
-		console.log('Invalid command');
-	}
+			break;
+		}
+		case '/create':
+		{
+			const response = await create();
+			console.log(response);
+			break;
+		}
+		default:
+		{
+			console.log('Invalid command');
+		}
 	}
 
 	prompt();

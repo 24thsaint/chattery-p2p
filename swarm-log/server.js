@@ -40,6 +40,11 @@ class Server {
 
 	book(query, room, callback) {
 		this.findOne(query, (data) => {
+			if (!data) {
+				callback(data, {error: 'No Matching Entries'});
+				return;
+			}
+
 			const roomIndex = data.availableRooms.indexOf(room);
 
 			if (roomIndex < 0) {
@@ -56,34 +61,4 @@ class Server {
 	}
 }
 
-const server = new Server();
-
-server.book({
-	hotel: 'RICHMONDE HOTEL',
-	date: 'Wed Aug 29 2018'
-}, 'Room1', (data, err) => {
-	console.log(err);
-	console.log(data);
-});
-
-function create() {
-	const mockRoomIDs = [];
-
-	for (let index = 1; index <= 100; index++) {
-		mockRoomIDs.push('Room' + index);
-	}
-
-	for (let index = 1; index <= 60; index++) {
-		const keyDate = new Date();
-		keyDate.setDate(index);
-
-		server.append({
-			hotel: 'RICHMONDE HOTEL',
-			date: keyDate.toDateString(),
-			availableRooms: mockRoomIDs,
-			appendedOn: new Date()
-		});
-	}
-}
-
-module.exports = server;
+module.exports = Server;

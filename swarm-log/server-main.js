@@ -3,7 +3,7 @@ const Server = require('./server');
 const server = new Server();
 let rl;
 
-function create() {
+function seed() {
 	return new Promise((resolve, reject) => {
 		const mockRoomIDs = [];
 
@@ -90,7 +90,7 @@ async function prompt() {
 		}
 		case '/seed':
 		{
-			const response = await create();
+			const response = await seed();
 			console.log(response);
 			break;
 		}

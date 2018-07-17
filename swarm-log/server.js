@@ -34,10 +34,21 @@ class Server {
 		this.findOne = query.findOne.bind(this);
 	}
 
+	/**
+	 * Appends the data to the swarmlog instance.
+	 * 
+	 * @param {object} data 
+	 */
 	append(data) {
 		this.log.append(data);
 	}
 
+	/**
+	 * Books a room according to tbe specified query criteria.
+	 * 
+	 * @param {object} query 
+	 * @param {string} room 
+	 */
 	async book(query, room) {
 		const data = await this.findOne(query);
 
@@ -61,6 +72,13 @@ class Server {
 		return data;
 	}
 
+	/**
+	 * Create a new hotel according to the criteria.
+	 * 
+	 * @param {string} hotel 
+	 * @param {string} date 
+	 * @param {string|array} rooms - string as comma-separated values or array
+	 */
 	createHotel(hotel, date, rooms) {
 		return new Promise((resolve, reject) => {
 			const data = {

@@ -1,5 +1,9 @@
 const query = {
-	find: function (query, callback) {
+	/**
+	 * Returns all matching documents according to
+	 * query criteria.
+	 */
+	find: function (query) {
 		const response = [];
 		const reader = this.log.createReadStream({
 			live: false,
@@ -33,7 +37,11 @@ const query = {
 				});
 		})
 	},
-	findOne: async function (query, callback) {
+	/**
+	 * Returns the latest matching document
+	 * according to query criteria.
+	 */
+	findOne: async function (query) {
 		const data = await this.find(query);
 		return new Promise((resolve, reject) => {
 			const sortedData = data.sort((a, b) => {

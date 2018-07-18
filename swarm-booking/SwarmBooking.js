@@ -41,12 +41,7 @@ class SwarmBooking {
             })
             .on('data', (data) => {
                 this._logger('RECEIVED', data)
-
-                this.database.put(data.key, data.value, (err) => {
-                    if (err) this._logger(err)
-                })
-
-                this.index(data.value, data.key)
+                this.index(data.key, data.value)
             })
     }
 
@@ -60,7 +55,7 @@ class SwarmBooking {
         let f = await this.find(hash)
         
         if (!f) {
-            await this.log.append(hash)
+            await this.log.append(JSON.stringify(booking))
             console.log(colors.green('***************************'))
             console.log(colors.green('Room Booked!'))
             console.log(booking)
@@ -95,13 +90,13 @@ class SwarmBooking {
      * @param {object} hashedData 
      * @param {string} key
      */
-    index(hashedData, key) {
-        this.database.put(hashedData, key, (err) => {
-            if (err) return this._logger(err)
-        })
-        this.database.get(hashedData, (err, val) => {
-            if (err) return this._logger(err)
-            this._logger('index', val)
+    index(key, data) {
+        const hashedData = this._hash(data);
+
+        this.database.put(key, data, (err) => {
+            this.database.put(hashedData, key, (err) => {
+                if (err) return this._logger(err)
+            })
         })
     }
 
@@ -115,6 +110,18 @@ class SwarmBooking {
         if (verbose) {
             console.log(message)
         }
+    }
+
+    getAllBookings() {     
+        this.database.on('ready', () => {
+            this.log.createReadStream()
+            .on('data', (value) => {
+                this.database.get(value.key, (err, data) => {
+                    console.log('====================================')
+                    console.log(data)
+                })
+            })  
+        })
     }
 
     /**

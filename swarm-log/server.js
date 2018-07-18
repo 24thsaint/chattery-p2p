@@ -3,8 +3,7 @@ const keys = require('./keys.json');
 const sodium = require('chloride/browser');
 const wrtc = require('wrtc');
 const level = require('level');
-const faker = require('faker');
-const query = require('./query')
+const query = require('./query');
 
 const verbose = process.env.VERBOSE || false;
 
@@ -50,18 +49,17 @@ class Server {
 	 * @param {string} room 
 	 */
 	async book(query, room) {
-		const data = await this.findOne(query);
-
-		if (!data) {
-			callback(data, {error: 'No Matching Entries'});
-			return;
+		let data;
+		try {
+			data = await this.findOne(query);
+		} catch(e) {
+			throw e;
 		}
 
 		const roomIndex = data.availableRooms.indexOf(room);
 
 		if (roomIndex < 0) {
-			callback(data, {error: 'Room Not Found'});
-			return;
+			throw new Error('Room Not Found or Already Booked!');
 		}
 
 		data.availableRooms.splice(roomIndex, 1);
@@ -85,7 +83,7 @@ class Server {
 				hotel,
 				date,
 				rooms
-			}
+			};
 			if (typeof rooms === 'string') {
 				const parsedRooms = rooms.split(',').map(room => room.trim());
 				data.rooms = parsedRooms;

@@ -33,7 +33,11 @@ const query = {
 					reject('Stream closed');
 				})
 				.on('end', function () {
-					resolve(response);
+					if (response.length === 0) {
+						reject(new Error('No matching entries'));
+					} else {
+						resolve(response);
+					}
 				});
 		})
 	},
@@ -41,21 +45,21 @@ const query = {
 	 * Returns the latest matching document
 	 * according to query criteria.
 	 */
-	findOne: async function (query) {
-		const data = await this.find(query);
-		return new Promise((resolve, reject) => {
-			const sortedData = data.sort((a, b) => {
-				const dateA = new Date(a.appendedOn);
-				const dateB = new Date(b.appendedOn);
-	
-				if (dateA === dateB) {
-					return 0;
-				}
-	
-				return dateA < dateB ? 1 : -1;
-			});
-			resolve(sortedData[0]);
-		});
+	findOne: function (query) {
+		return this.find(query)
+			.then((data) => {
+				const sortedData = data.sort((a, b) => {
+					const dateA = new Date(a.appendedOn);
+					const dateB = new Date(b.appendedOn);
+		
+					if (dateA === dateB) {
+						return 0;
+					}
+		
+					return dateA < dateB ? 1 : -1;
+				});
+				return sortedData[0];
+			})
 	}
 }
 

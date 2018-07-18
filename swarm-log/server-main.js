@@ -1,7 +1,10 @@
 const readline = require('readline');
 const Server = require('./server');
+const colors = require('colors');
 const server = new Server();
 let rl;
+
+help();
 
 function seed() {
 	return new Promise((resolve, reject) => {
@@ -14,15 +17,16 @@ function seed() {
 		for (let index = 1; index <= 60; index++) {
 			const keyDate = new Date();
 			keyDate.setDate(index);
-
-			server.append({
+			const data = {
 				hotel: 'RICHMONDE HOTEL',
 				date: keyDate.toDateString(),
 				availableRooms: mockRoomIDs,
 				appendedOn: new Date()
-			});
-		}
+			};
 
+			server.append(data);
+			console.log(data);
+		}
 		resolve('CREATION DONE!');
 	});
 }
@@ -52,6 +56,16 @@ function closePrompter() {
 	rl = undefined;
 }
 
+function help() {
+	console.log('*************************');
+	console.log('Available commands:');
+	console.log('/showAvailable - Show available rooms by hotel and date');
+	console.log('/book - Book an available room');
+	console.log('/seed - Run a seed to create many entries');
+	console.log('/create - Create a new hotel');
+	console.log('*************************');
+}
+
 async function prompt() {
 	const command = await openPrompter('Command');
 
@@ -62,11 +76,17 @@ async function prompt() {
 			let date = await openPrompter('Date (Month/Day/Year)');
 			date = new Date(date).toDateString();
 
-			const data = await server.findOne({
-				hotel,
-				date
-			});
-			console.log(data);
+			try {
+				const data = await server.findOne({
+					hotel,
+					date
+				});
+				console.log(data);
+			} catch(e) {
+				console.log('*************************');
+				console.log(colors.red(e.message));
+				console.log('*************************');
+			}
 			break;
 		}
 		case '/book':
@@ -76,15 +96,21 @@ async function prompt() {
 			date = new Date(date).toDateString();
 			const room = await openPrompter('Room');
 
-			const data = await server.book({
-				hotel,
-				date,
-			}, room);
+			try {
+				const data = await server.book({
+					hotel,
+					date,
+				}, room);
 
-			console.log(data);
-			console.log('*************************');
-			console.log('Room successfully booked!');
-			console.log('*************************');
+				console.log(data);
+				console.log('*************************');
+				console.log(colors.green('Room successfully booked!'));
+				console.log('*************************');
+			} catch(e) {
+				console.log('*************************');
+				console.log(colors.red(e.message));
+				console.log('*************************');
+			}
 
 			break;
 		}
@@ -104,14 +130,19 @@ async function prompt() {
 			const data = await server.createHotel(hotel, date, rooms);
 			console.log(data);
 			console.log('*************************');
-			console.log('Hotel Created!');
+			console.log(colors.green('Hotel Created!'));
 			console.log('*************************');
 
 			break;
 		}
+		case '/help':
+		{
+			help();
+			break;
+		}
 		default:
 		{
-			console.log('Invalid command');
+			console.log(colors.red('Invalid command'));
 		}
 	}
 

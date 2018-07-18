@@ -70,8 +70,8 @@ hypercore-client/messages/*
 
 hyper-discovery/data/*
 
-swarm-log/client-database
-swarm-log/server-database
+swarm-hotels/client-database
+swarm-hotels/server-database
 
 chat-logger/chat-database
 
